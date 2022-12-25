@@ -1,4 +1,6 @@
-package top.expli;public class Main {
+package top.expli;
+
+public class Main {
     public static void main(String[] args) {
         System.out.println("Hello world!");
     }
