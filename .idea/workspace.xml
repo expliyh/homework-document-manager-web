@@ -5,16 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6fd4e7d9-5c8e-4028-8b4d-7a8dc63e5c22" name="变更" comment="Initial Commit">
-      <change afterPath="$PROJECT_DIR$/src/main/java/top/expli/ClientDocument.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/top/expli/ClientUser.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/top/expli/webapi/SocketClient.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/top/expli/webapi/WebAdapter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/top/expli/ExceptionProcess.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/top/expli/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/top/expli/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/top/expli/webapi/Request.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/top/expli/webapi/Request.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/top/expli/webapi/RequestHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/top/expli/webapi/SocketServer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/top/expli/GUI/UserList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/top/expli/GUI/UserList.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/top/expli/knives.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/top/expli/webapi/WebAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/top/expli/webapi/WebAdapter.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,6 +48,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
+    "extract.method.default.visibility": "private",
     "last_opened_file_path": "C:/Users/expli/Codes/档案管理系统/socket_tester",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -61,6 +57,11 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\expli\Codes\档案管理系统\Web\src\main\java\top\expli" />
+    </key>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="应用程序级" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="默认任务">
@@ -69,7 +70,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1671937560623</updated>
-      <workItem from="1671937562402" duration="4545000" />
+      <workItem from="1671937562402" duration="8517000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit">
       <created>1671959048131</created>
@@ -92,7 +93,21 @@
       <option name="project" value="LOCAL" />
       <updated>1671959090156</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Initial Commit">
+      <created>1671963088761</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1671963088761</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Initial Commit">
+      <created>1671963109137</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1671963109137</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

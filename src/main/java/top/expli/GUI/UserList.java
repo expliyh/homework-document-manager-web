@@ -3,7 +3,9 @@ package top.expli.GUI;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import top.expli.ExceptionProcess;
 import top.expli.cache_user;
+import top.expli.exceptions.KnifeException;
 import top.expli.exceptions.UserNotFound;
+import top.expli.webapi.WebAdapter;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -11,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.Vector;
 
 public class UserList {
@@ -69,7 +72,12 @@ public class UserList {
     }
 
     public void refresh() {
-        Vector<Vector<String>> list = cache_user.getUserList();
+        Vector<Vector<String>> list = null;
+        try {
+            list = WebAdapter.getUserList();
+        } catch (IOException | KnifeException e) {
+            ExceptionProcess.process(thisFrame,e);
+        }
         Vector<String> head = new Vector<>(2);
         head.add("用户名");
         head.add("权限");
