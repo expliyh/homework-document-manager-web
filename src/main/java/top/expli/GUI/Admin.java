@@ -1,16 +1,20 @@
 package top.expli.GUI;
 
 import com.formdev.flatlaf.FlatIntelliJLaf;
+import top.expli.ClientUser;
 import top.expli.ExceptionProcess;
 import top.expli.User;
 import top.expli.cache_user;
+import top.expli.exceptions.KnifeException;
 import top.expli.exceptions.UserNotFound;
+import top.expli.webapi.WebAdapter;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.Objects;
 
 public class Admin {
@@ -21,10 +25,10 @@ public class Admin {
     private JTextField docField;
     private JTextField userField;
     private JTextField textField3;
-    private String meName;
+    private ClientUser me;
 
-    public Admin(User usr) {
-        this.meName = usr.getUserName();
+    public Admin(ClientUser usr) {
+        this.me = usr;
         userField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -88,8 +92,8 @@ public class Admin {
                     UserList.main(usr.getUserName());
                 } else {
                     try {
-                        UserAdmin.main(new String[0], cache_user.findUser(userField.getText()), meName);
-                    } catch (UserNotFound ex) {
+                        UserAdmin.main(WebAdapter.getUserInfo(userField.getText()),me);
+                    } catch (IOException | KnifeException ex) {
                         ExceptionProcess.process(panel1.getComponent(0), ex);
                     }
                 }
@@ -103,11 +107,11 @@ public class Admin {
         });
     }
 
-    public static void main(String[] args) {
-        main(args, new User("admin", "12345678"));
-    }
+//    public static void main(String[] args) {
+//        main(args, new User("admin", "12345678"));
+//    }
 
-    public static void main(String[] args, User usr) {
+    public static void main(ClientUser usr) {
         try {
             UIManager.setLookAndFeel(new FlatIntelliJLaf());
         } catch (UnsupportedLookAndFeelException e) {

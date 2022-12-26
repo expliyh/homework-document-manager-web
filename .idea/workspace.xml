@@ -4,7 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6fd4e7d9-5c8e-4028-8b4d-7a8dc63e5c22" name="变更" comment="Initial Commit" />
+    <list default="true" id="6fd4e7d9-5c8e-4028-8b4d-7a8dc63e5c22" name="变更" comment="Initial Commit">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/top/expli/GUI/Admin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/top/expli/GUI/Admin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/top/expli/GUI/Login.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/top/expli/GUI/Login.form" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/top/expli/GUI/Login.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/top/expli/GUI/Login.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/top/expli/GUI/UserAdmin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/top/expli/GUI/UserAdmin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/top/expli/webapi/WebAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/top/expli/webapi/WebAdapter.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -65,7 +73,7 @@
       <option name="presentableId" value="Default" />
       <updated>1671937560623</updated>
       <workItem from="1671937562402" duration="8517000" />
-      <workItem from="1671975521011" duration="695000" />
+      <workItem from="1671975521011" duration="4510000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit">
       <created>1671959048131</created>
@@ -109,7 +117,14 @@
       <option name="project" value="LOCAL" />
       <updated>1671975619605</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Initial Commit">
+      <created>1672020560040</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1672020560040</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

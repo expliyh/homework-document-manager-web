@@ -1,15 +1,19 @@
 package top.expli.GUI;
 
 import com.formdev.flatlaf.FlatIntelliJLaf;
+import top.expli.ClientUser;
 import top.expli.ExceptionProcess;
 import top.expli.User;
 import top.expli.cache_user;
+import top.expli.exceptions.KnifeException;
 import top.expli.exceptions.UserNotFound;
+import top.expli.webapi.WebAdapter;
 
 import javax.swing.*;
 import javax.swing.event.ListDataListener;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -22,8 +26,8 @@ public class UserAdmin extends JDialog {
     private JButton userdelButton;
     private JComboBox<String> permissionBox;
 
-    private User user;
-    private String meName;
+    private ClientUser user;
+    private ClientUser me;
 
     public UserAdmin() {
         super((Frame) null, "用户编辑");
@@ -72,35 +76,45 @@ public class UserAdmin extends JDialog {
         });
     }
 
-    public UserAdmin(User usr, String meName) {
+    public UserAdmin(ClientUser usr, ClientUser me) {
         this();
         this.user = usr;
-        this.meName = meName;
+        this.me = me;
         nameField.setText(user.getUserName());
         String[] list = new String[]{"管理员", "用户", "访客"};
-        if (usr.get_permission_level() < 3) {
+        if (usr.getPermissionLevel() < 3) {
             this.userdelButton.setVisible(false);
             list = new String[]{"管理员", "用户", "访客", "S·Y·S·T·E·M", "P·A·I·M·O·N", "SU"};
             this.permissionBox.setEnabled(false);
         }
         ComboBoxModel<String> model = new DefaultComboBoxModel<>(list);
-        model.setSelectedItem(list[(usr.get_permission_level() + 3) % 6]);
+        model.setSelectedItem(list[(usr.getPermissionLevel() + 3) % 6]);
         this.permissionBox.setModel(model);
     }
 
     private void onOK() {
+        ClientUser newUser = new ClientUser(user.getUserName());
         // 在此处添加您的代码
         if (!Arrays.equals(passwordField.getPassword(), "".toCharArray())) {
-            cache_user.changePasswd(user.getUserName(), Arrays.toString(passwordField.getPassword()));
+//            cache_user.changePasswd(user.getUserName(), Arrays.toString(passwordField.getPassword()));
+            newUser.setPassword(String.valueOf(passwordField.getPassword()));
+        } else {
+            newUser.setPassword(null);
         }
-        if ((this.permissionBox.getSelectedIndex() + 3) % 6 != this.user.get_permission_level()) {
-            if (Objects.equals(this.user.getUserName(), this.meName)) {
+        if ((this.permissionBox.getSelectedIndex() + 3) % 6 != this.user.getPermissionLevel()) {
+            if (Objects.equals(this.user.getUserName(), this.me.getUserName())) {
                 if (JOptionPane.showConfirmDialog(getRootPane(), "您正在修改自己的权限等级\n" +
                         "请仔细确认！", "不要丢失自己的访问权限", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) != JOptionPane.YES_OPTION) {
                     return;
                 }
             }
-            cache_user.setPermissionLevel(user.getUserName(), (this.permissionBox.getSelectedIndex() + 3) % 6);
+        }
+        newUser.setPermissionLevel((this.permissionBox.getSelectedIndex() + 3) % 6);
+        try {
+            WebAdapter.editUser(newUser);
+        } catch (KnifeException | IOException e) {
+            ExceptionProcess.process(getRootPane(),e);
+            return;
         }
         dispose();
     }
@@ -119,13 +133,13 @@ public class UserAdmin extends JDialog {
         main(usr, meName);
     }
 
-    public static void main(User usr, String meName) {
+    public static void main(ClientUser usr,ClientUser me) {
         try {
             UIManager.setLookAndFeel(new FlatIntelliJLaf());
         } catch (UnsupportedLookAndFeelException e) {
             throw new RuntimeException(e);
         }
-        UserAdmin dialog = new UserAdmin(usr, meName);
+        UserAdmin dialog = new UserAdmin(usr, me);
         dialog.pack();
         dialog.setVisible(true);
         //System.exit(0);

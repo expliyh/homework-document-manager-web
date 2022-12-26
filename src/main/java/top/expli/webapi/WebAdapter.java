@@ -26,8 +26,30 @@ public class WebAdapter {
         return getClientUserFromResponse(response);
     }
 
-    private static ClientDocument getClientDocFromResponse(Response response){
-        
+    public static void deleteUser(String userName){
+
+    }
+    public static ClientDocument getDocumentInfo(String docName) throws IOException, KnifeException {
+        Request request = new Request(NameSpace.DOCUMENTS, Operations.GET);
+        Map<String, String> detail = new HashMap<>();
+        detail.put("docName", docName);
+        request.setDetail(detail);
+        Response response = socketClient.sendMessage(request);
+        return getClientDocFromResponse(response);
+    }
+
+    private static ClientDocument getClientDocFromResponse(Response response) throws KnifeException {
+        if (response.getCode() == 200) {
+            ClientDocument clientDocument = new ClientDocument(response.getDetail().get("docName"));
+            clientDocument.setPermission(response.getDetail().get("permission"));
+            clientDocument.setPermissionLevel(Integer.parseInt(response.getDetail().get("permissionLevel")));
+            clientDocument.setDescription(response.getDetail().get("description"));
+            return clientDocument;
+        } else if (response.getException() == null) {
+            throw new ServerError();
+        } else {
+            throw response.getException();
+        }
     }
 
     @NotNull
@@ -53,8 +75,41 @@ public class WebAdapter {
         return getClientUserFromResponse(response);
     }
 
+    public static void editUser(ClientUser newUser) throws IOException, KnifeException {
+        Request request = new Request(NameSpace.USERS, Operations.EDIT);
+        Map<String, String> detail = new HashMap<>();
+        detail.put("userName", newUser.getUserName());
+        detail.put("password", newUser.getPassword());
+        detail.put("permissionLevel", String.valueOf(newUser.getPermissionLevel()));
+        request.setDetail(detail);
+        Response response = socketClient.sendMessage(request);
+        if (response.getCode() == 200) {
+            return;
+        } else {
+            if (response.getException() == null) {
+                throw new ServerError();
+            } else {
+                throw response.getException();
+            }
+        }
+    }
+
     public static Vector<Vector<String>> getUserList() throws IOException, KnifeException {
         Request request = new Request(Request.NameSpace.USERS, Request.Operations.LIST);
+        Response response = socketClient.sendMessage(request);
+        if (response.getCode() == 200) {
+            return response.getListDetail();
+        } else {
+            if (response.getException() == null) {
+                throw new ServerError();
+            } else {
+                throw response.getException();
+            }
+        }
+    }
+
+    public static Vector<Vector<String>> getDocumentList() throws IOException, KnifeException {
+        Request request = new Request(NameSpace.DOCUMENTS, Operations.LIST);
         Response response = socketClient.sendMessage(request);
         if (response.getCode() == 200) {
             return response.getListDetail();
