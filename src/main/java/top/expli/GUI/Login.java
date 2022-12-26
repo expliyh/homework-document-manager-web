@@ -2,9 +2,6 @@ package top.expli.GUI;
 
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import top.expli.ClientUser;
-import top.expli.User;
-import top.expli.cache_user;
-import top.expli.documents.Documents;
 import top.expli.exceptions.KnifeException;
 import top.expli.webapi.WebAdapter;
 
@@ -73,10 +70,10 @@ public class Login {
             }
             if (usr.getPermissionLevel() <= 3) {
                 thisFrame.setVisible(false);
-                Admin.main(new String[0]);
+                Admin.main(thisFrame,usr);
             } else if (usr.getPermissionLevel() == 4) {
                 thisFrame.setVisible(false);
-                UserGUI.main(new String[]{},usr.getUserName());
+                UserGUI.main(thisFrame,usr);
             }
         }
     }

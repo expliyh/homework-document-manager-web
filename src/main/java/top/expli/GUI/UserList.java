@@ -1,8 +1,8 @@
 package top.expli.GUI;
 
 import com.formdev.flatlaf.FlatIntelliJLaf;
+import top.expli.ClientUser;
 import top.expli.ExceptionProcess;
-import top.expli.cache_user;
 import top.expli.exceptions.KnifeException;
 import top.expli.exceptions.UserNotFound;
 import top.expli.webapi.WebAdapter;
@@ -26,18 +26,14 @@ public class UserList {
     private JButton buttonSearch;
     private JCheckBox isCaps;
     private JButton newUserButton;
-    private String meName;
+    private ClientUser me;
 
-    public UserList(JFrame thisFrame, String meName) {
+    public UserList(JFrame thisFrame, ClientUser me) {
         this.thisFrame = thisFrame;
-        this.meName = meName;
-        try {
-            if (cache_user.GetPermissionLevel(meName) > 3) {
-                this.newUserButton.setEnabled(false);
-                this.newUserButton.setVisible(false);
-            }
-        } catch (UserNotFound e) {
-            ExceptionProcess.process(thisFrame, e);
+        this.me = me;
+        if (me.getPermissionLevel() > 3) {
+            this.newUserButton.setEnabled(false);
+            this.newUserButton.setVisible(false);
         }
         refresh();
         userTable.addMouseListener(new MouseAdapter() {
@@ -48,9 +44,11 @@ public class UserList {
                     String userNameSelected = (String) userTable.getValueAt(userTable.getSelectedRow(), 0);
                     System.out.println("Click " + userNameSelected);
                     try {
-                        UserAdmin.main(new String[]{""}, cache_user.findUser(userNameSelected), meName);
+                        UserAdmin.main(WebAdapter.getUserInfo(userNameSelected), me);
                     } catch (UserNotFound ex) {
                         ErrorMessage.main(new String[]{""}, ex);
+                    } catch (KnifeException|IOException ex) {
+                        ExceptionProcess.process(thisFrame,ex);
                     }
                 }
                 refresh();
@@ -91,14 +89,14 @@ public class UserList {
         userTable.setModel(userModel);
     }
 
-    public static void main(String meName) {
+    public static void main(ClientUser me) {
         try {
             UIManager.setLookAndFeel(new FlatIntelliJLaf());
         } catch (UnsupportedLookAndFeelException e) {
             System.out.println("FUCK");
         }
         JFrame frame = new JFrame("用户列表");
-        UserList list = new UserList(frame, meName);
+        UserList list = new UserList(frame, me);
         frame.setContentPane(list.panel);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();

@@ -3,8 +3,6 @@ package top.expli.GUI;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import top.expli.ClientUser;
 import top.expli.ExceptionProcess;
-import top.expli.User;
-import top.expli.cache_user;
 import top.expli.exceptions.KnifeException;
 import top.expli.exceptions.UserNotFound;
 import top.expli.webapi.WebAdapter;
@@ -12,6 +10,7 @@ import top.expli.webapi.WebAdapter;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -89,10 +88,10 @@ public class Admin {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (Objects.equals(userField.getText(), "")) {
-                    UserList.main(usr.getUserName());
+                    UserList.main(usr);
                 } else {
                     try {
-                        UserAdmin.main(WebAdapter.getUserInfo(userField.getText()),me);
+                        UserAdmin.main(WebAdapter.getUserInfo(userField.getText()), me);
                     } catch (IOException | KnifeException ex) {
                         ExceptionProcess.process(panel1.getComponent(0), ex);
                     }
@@ -102,7 +101,7 @@ public class Admin {
         adocButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                DocList.main(new String[]{""},usr.getUserName());
+                DocList.main(usr);
             }
         });
     }
@@ -111,7 +110,7 @@ public class Admin {
 //        main(args, new User("admin", "12345678"));
 //    }
 
-    public static void main(ClientUser usr) {
+    public static void main(Component parent, ClientUser usr) {
         try {
             UIManager.setLookAndFeel(new FlatIntelliJLaf());
         } catch (UnsupportedLookAndFeelException e) {
@@ -119,6 +118,7 @@ public class Admin {
         }
         JFrame frame = new JFrame("Admin");
         frame.setContentPane(new Admin(usr).panel1);
+        frame.setLocationRelativeTo(parent);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);

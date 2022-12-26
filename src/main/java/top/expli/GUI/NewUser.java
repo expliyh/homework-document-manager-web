@@ -1,18 +1,18 @@
 package top.expli.GUI;
 
 import com.formdev.flatlaf.FlatIntelliJLaf;
+import top.expli.ClientUser;
 import top.expli.ExceptionProcess;
 import top.expli.PasswordCheck;
-import top.expli.cache_user;
+import top.expli.exceptions.KnifeException;
 import top.expli.exceptions.UserExists;
+import top.expli.webapi.WebAdapter;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.event.ListDataListener;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Arrays;
 
 public class NewUser extends JDialog {
     private JPanel contentPane;
@@ -97,9 +97,6 @@ public class NewUser extends JDialog {
         if (userName.isEmpty()) {
             warnText.append("错误：用户名为空  ");
             errorFound = true;
-        } else if (cache_user.isUserExists(userName)) {
-            warnText.append("错误：用户已存在  ");
-            errorFound = true;
         }
         switch (PasswordCheck.check(password, confirm)) {
             case PasswordCheck.CHECK_PASSED -> {
@@ -140,8 +137,12 @@ public class NewUser extends JDialog {
     private void onOK() {
         // 在此处添加您的代码
         try {
-            cache_user.addUser(userNameField.getText(), String.valueOf(passwordField.getPassword()), permissionBox.getSelectedIndex() + 3);
-        } catch (UserExists e) {
+            ClientUser newUser = new ClientUser(userNameField.getText());
+            newUser.setPassword(String.valueOf(passwordField.getPassword()));
+            newUser.setPermissionLevel(permissionBox.getSelectedIndex() + 3);
+            WebAdapter
+//            cache_user.addUser(userNameField.getText(), String.valueOf(passwordField.getPassword()), permissionBox.getSelectedIndex() + 3);
+        } catch (KnifeException e) {
             ExceptionProcess.process(getRootPane(), e);
         }
         dispose();

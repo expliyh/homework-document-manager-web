@@ -1,10 +1,10 @@
 package top.expli.GUI;
 
 import com.formdev.flatlaf.FlatIntelliJLaf;
+import top.expli.ClientUser;
 import top.expli.ExceptionProcess;
-import top.expli.cache_user;
-import top.expli.documents.Documents;
 import top.expli.exceptions.*;
+import top.expli.webapi.WebAdapter;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.IOException;
 import java.util.Vector;
 
 public class DocList {
@@ -25,17 +26,13 @@ public class DocList {
     private JPanel panel;
     private JButton uploadButton;
 
-    protected String userName;
+    protected ClientUser me;
 
-    public DocList(JFrame thisFrame, String userName) {
+    public DocList(JFrame thisFrame, ClientUser me) {
         this.thisFrame = thisFrame;
-        this.userName = userName;
-        try {
-            if (cache_user.GetPermissionLevel(userName) > 4) {
-                uploadButton.setVisible(false);
-            }
-        } catch (UserNotFound e) {
-            ExceptionProcess.process(thisFrame, e);
+        this.me = me;
+        if (me.getPermissionLevel() > 4) {
+            uploadButton.setVisible(false);
         }
         this.refresh();
         docTable.addMouseListener(new MouseAdapter() {
@@ -43,16 +40,10 @@ public class DocList {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 if (e.getClickCount() >= 2) {
-                    if (JOptionPane.showConfirmDialog(thisFrame, "确认要下载此文档吗？", "下载文档", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == 0) {
-                        JFileChooser jFileChooser = new JFileChooser();
-                        jFileChooser.setSelectedFile(new File((String) docTable.getValueAt(docTable.getSelectedRow(), 0)));
-                        if (jFileChooser.showSaveDialog(thisFrame) == JFileChooser.APPROVE_OPTION) {
-                            try {
-                                Documents.saveAs(jFileChooser.getSelectedFile(), (String) docTable.getValueAt(docTable.getSelectedRow(), 0));
-                            } catch (KnifeException ex) {
-                                ExceptionProcess.process(thisFrame, ex);
-                            }
-                        }
+                    try {
+                        DocumentManager.main(thisFrame,me,WebAdapter.getDocumentInfo((String) docTable.getValueAt(docTable.getSelectedRow(),0)));
+                    } catch (IOException | KnifeException ex) {
+                        ExceptionProcess.process(thisFrame,ex);
                     }
                 }
             }
@@ -68,7 +59,7 @@ public class DocList {
 //                        ExceptionProcess.process(thisFrame, knifeException);
 //                    }
 //                }
-                UploadDialog.main(userName, thisFrame);
+                UploadDialog.main(me, thisFrame);
                 refresh();
             }
         });
@@ -83,8 +74,8 @@ public class DocList {
     public void refresh() {
         Vector<Vector<String>> list;
         try {
-            list = Documents.getDocumentList(userName);
-        } catch (UserNotFound e) {
+            list = WebAdapter.getDocumentList();
+        } catch (IOException | KnifeException e) {
             ExceptionProcess.process(thisFrame, e);
             thisFrame.dispose();
             return;
@@ -106,18 +97,18 @@ public class DocList {
         docTable.getColumn(head.get(1)).setWidth(50);
     }
 
-    public static void main(String[] args) {
-        main(args, "admin");
-    }
+//    public static void main(String[] args) {
+//        main(args, "admin");
+//    }
 
-    public static void main(String[] args, String userName) {
+    public static void main(ClientUser me) {
         try {
             UIManager.setLookAndFeel(new FlatIntelliJLaf());
         } catch (UnsupportedLookAndFeelException e) {
             System.out.println("主题设置失败！");
         }
         JFrame frame = new JFrame("DocList");
-        frame.setContentPane(new DocList(frame, userName).panel);
+        frame.setContentPane(new DocList(frame, me).panel);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);

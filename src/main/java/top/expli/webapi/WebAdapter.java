@@ -9,6 +9,7 @@ import top.expli.webapi.Request.Operations;
 import top.expli.webapi.Request.NameSpace;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
@@ -26,9 +27,58 @@ public class WebAdapter {
         return getClientUserFromResponse(response);
     }
 
-    public static void deleteUser(String userName){
-
+    public static void uploadDocument(ClientDocument clientDocument) throws IOException, KnifeException {
+        Request request = new Request(NameSpace.DOCUMENTS, Operations.UPLOAD);
+        Map<String, String> detail = new HashMap<>();
+        detail.put("docName", clientDocument.getDocName());
+        detail.put("lastModified", String.valueOf(clientDocument.getLastModified()));
+        detail.put("fileName", clientDocument.getFileName());
+        detail.put("description", clientDocument.getDescription());
+        detail.put("permissionLevel", String.valueOf(clientDocument.getPermissionLevel()));
+        request.setDetail(detail);
+        request.setAttachment(clientDocument.getFile());
+        Response response = socketClient.sendMessage(request);
+        if (response.getCode() == 200) {
+            return;
+        } else if (response.getException() == null) {
+            throw new ServerError();
+        } else {
+            throw response.getException();
+        }
     }
+
+    public static ClientDocument downloadDocument(String docName) throws IOException, KnifeException {
+        Request request = new Request(NameSpace.DOCUMENTS, Operations.DOWNLOAD);
+        Map<String, String> detail = new HashMap<>();
+        request.setDetail(detail);
+        Response response = socketClient.sendMessage(request);
+        if (response.getCode() == 200) {
+            ClientDocument document = new ClientDocument();
+            document.setFileName(response.getDetail().get("fileName"));
+            document.setFile(response.getAttachment());
+            return document;
+        } else if (response.getException() == null) {
+            throw new ServerError();
+        } else {
+            throw response.getException();
+        }
+    }
+
+    public static void deleteUser(String userName) throws KnifeException, IOException {
+        Request request = new Request(NameSpace.USERS, Operations.DELETE);
+        Map<String, String> detail = new HashMap<>();
+        detail.put("userName", userName);
+        request.setDetail(detail);
+        Response response = socketClient.sendMessage(request);
+        if (response.getCode() == 200) {
+            return;
+        } else if (response.getException() == null) {
+            throw new ServerError();
+        } else {
+            throw response.getException();
+        }
+    }
+
     public static ClientDocument getDocumentInfo(String docName) throws IOException, KnifeException {
         Request request = new Request(NameSpace.DOCUMENTS, Operations.GET);
         Map<String, String> detail = new HashMap<>();
@@ -36,6 +86,10 @@ public class WebAdapter {
         request.setDetail(detail);
         Response response = socketClient.sendMessage(request);
         return getClientDocFromResponse(response);
+    }
+
+    public static void addUser(ClientUser clientUser) {
+
     }
 
     private static ClientDocument getClientDocFromResponse(Response response) throws KnifeException {

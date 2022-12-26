@@ -5,7 +5,35 @@ public class ClientDocument {
     private String owner;
     private String permission;
     private int permissionLevel;
+
+    public long getLastModified() {
+        return lastModified;
+    }
+
+    public void setLastModified(long lastModified) {
+        this.lastModified = lastModified;
+    }
+
+    private long lastModified;
     private String description;
+    private byte[] file;
+    private String fileName;
+
+    public byte[] getFile() {
+        return file;
+    }
+
+    public void setFile(byte[] file) {
+        this.file = file;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
 
     public ClientDocument() {
     }

@@ -3,14 +3,10 @@ package top.expli.GUI;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import top.expli.ClientUser;
 import top.expli.ExceptionProcess;
-import top.expli.User;
-import top.expli.cache_user;
 import top.expli.exceptions.KnifeException;
-import top.expli.exceptions.UserNotFound;
 import top.expli.webapi.WebAdapter;
 
 import javax.swing.*;
-import javax.swing.event.ListDataListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
@@ -66,9 +62,9 @@ public class UserAdmin extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 if (JOptionPane.showConfirmDialog(getComponent(0), "您确认要删除该用户吗？", "删除用户 " + user.getUserName(), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) == 0) {
                     try {
-                        cache_user.removeUser(user.getUserName());
-                    } catch (UserNotFound ex) {
-                        ExceptionProcess.process(getComponent(0), ex);
+                        WebAdapter.deleteUser(user.getUserName());
+                    } catch (KnifeException | IOException ex) {
+                        ExceptionProcess.process(getRootPane(),ex);
                     }
                     dispose();
                 }
@@ -124,13 +120,13 @@ public class UserAdmin extends JDialog {
         dispose();
     }
 
-    public static void main(String[] args) {
-        main(args, new User("Demo", "passwd"), "S·Y·S·T·E·M");
-    }
+//    public static void main(String[] args) {
+//        main(args, new User("Demo", "passwd"), "S·Y·S·T·E·M");
+//    }
 
     //用来兼容之前的代码
-    public static void main(String[] args, User usr, String meName) {
-        main(usr, meName);
+    public static void main(String[] args, ClientUser usr, ClientUser me) {
+        main(usr, me);
     }
 
     public static void main(ClientUser usr,ClientUser me) {

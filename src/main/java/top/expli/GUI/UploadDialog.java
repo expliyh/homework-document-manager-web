@@ -1,21 +1,23 @@
 package top.expli.GUI;
 
 import com.formdev.flatlaf.FlatIntelliJLaf;
+import top.expli.ClientDocument;
+import top.expli.ClientUser;
 import top.expli.ExceptionProcess;
-import top.expli.cache_user;
-import top.expli.documents.Documents;
-import top.expli.exceptions.FileNotFound;
+import top.expli.Permissions;
 import top.expli.exceptions.KnifeException;
-import top.expli.exceptions.UserNotFound;
+import top.expli.exceptions.NotAFile;
+import top.expli.webapi.WebAdapter;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 public class UploadDialog extends JDialog {
@@ -28,16 +30,17 @@ public class UploadDialog extends JDialog {
     private JTextArea descriptionArea;
     private JTextField timeField;
     private JTextField lastEditField;
+    private JCheckBox setPublicCheckBox;
 
-    private String userName;
+    private ClientUser me;
 
     private File toUpload;
     private BasicFileAttributes attributes;
 
-    public UploadDialog(String userName) {
+    public UploadDialog(ClientUser me) {
         super();
         toUpload = null;
-        this.userName = userName;
+        this.me = me;
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
@@ -92,12 +95,33 @@ public class UploadDialog extends JDialog {
         if (toUpload == null) {
             JOptionPane.showMessageDialog(getRootPane(), "请先选择文件", "未选择文件！", JOptionPane.WARNING_MESSAGE);
             return;
+        } else if (!toUpload.isFile()) {
+            ExceptionProcess.process(getRootPane(), new NotAFile());
         }
-        try {
-            Documents.addDocument(toUpload, userName, cache_user.GetPermissionLevel(userName), docNameField.getText(), descriptionArea.getText(), attributes);
-        } catch (Exception exception) {
-            ExceptionProcess.process(getRootPane(), exception);
+        try (FileInputStream inputStream = new FileInputStream(toUpload)) {
+            ClientDocument clientDocument = new ClientDocument(docNameField.getText());
+            if (setPublicCheckBox.isSelected()) {
+                clientDocument.setPermissionLevel(Permissions.PUBLIC);
+            } else {
+                clientDocument.setPermissionLevel(Math.max(Permissions.ADMINONLY, me.getPermissionLevel()));
+            }
+            clientDocument.setOwner(me.getUserName());
+            clientDocument.setFileName(toUpload.getName());
+            clientDocument.setFile(inputStream.readAllBytes());
+            WebAdapter.uploadDocument(clientDocument);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (KnifeException e) {
+            ExceptionProcess.process(getRootPane(), e);
+            return;
         }
+//        try {
+//            Documents.addDocument(toUpload, userName, cache_user.GetPermissionLevel(userName), docNameField.getText(), descriptionArea.getText(), attributes);
+//        } catch (Exception exception) {
+//            ExceptionProcess.process(getRootPane(), exception);
+//        }
         // 在此处添加您的代码
         dispose();
     }
@@ -107,17 +131,17 @@ public class UploadDialog extends JDialog {
         dispose();
     }
 
-    public static void main(String[] args) {
-        main("demo", null);
-    }
+//    public static void main(String[] args) {
+//        main("demo", null);
+//    }
 
-    public static void main(String userName, Component parent) {
+    public static void main(ClientUser me, Component parent) {
         try {
             UIManager.setLookAndFeel(new FlatIntelliJLaf());
         } catch (UnsupportedLookAndFeelException e) {
             throw new RuntimeException(e);
         }
-        UploadDialog dialog = new UploadDialog(userName);
+        UploadDialog dialog = new UploadDialog(me);
         dialog.setTitle("上传档案");
         dialog.setLocationRelativeTo(parent);
         dialog.pack();

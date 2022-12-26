@@ -5,12 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6fd4e7d9-5c8e-4028-8b4d-7a8dc63e5c22" name="变更" comment="Initial Commit">
+      <change afterPath="$PROJECT_DIR$/src/main/java/top/expli/Permissions.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/top/expli/exceptions/NotAFile.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/top/expli/ClientDocument.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/top/expli/ClientDocument.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/top/expli/GUI/Admin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/top/expli/GUI/Admin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/top/expli/GUI/Login.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/top/expli/GUI/Login.form" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/top/expli/GUI/DocList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/top/expli/GUI/DocList.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/top/expli/GUI/DocumentManager.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/top/expli/GUI/DocumentManager.form" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/top/expli/GUI/DocumentManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/top/expli/GUI/DocumentManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/top/expli/GUI/Login.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/top/expli/GUI/Login.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/top/expli/GUI/UploadDialog.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/top/expli/GUI/UploadDialog.form" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/top/expli/GUI/UploadDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/top/expli/GUI/UploadDialog.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/top/expli/GUI/UserAdmin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/top/expli/GUI/UserAdmin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/top/expli/GUI/UserGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/top/expli/GUI/UserGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/top/expli/GUI/UserList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/top/expli/GUI/UserList.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/top/expli/webapi/Request.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/top/expli/webapi/Request.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/top/expli/webapi/WebAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/top/expli/webapi/WebAdapter.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -63,6 +72,29 @@
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\expli\Codes\档案管理系统\Web\src\main\java\top\expli" />
     </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="top.expli" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="top.expli.Main" />
+      <module name="Web" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="top.expli.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="应用程序.Main" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="应用程序级" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -73,7 +105,7 @@
       <option name="presentableId" value="Default" />
       <updated>1671937560623</updated>
       <workItem from="1671937562402" duration="8517000" />
-      <workItem from="1671975521011" duration="4510000" />
+      <workItem from="1671975521011" duration="16736000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit">
       <created>1671959048131</created>
@@ -124,7 +156,14 @@
       <option name="project" value="LOCAL" />
       <updated>1672020560040</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Initial Commit">
+      <created>1672023906388</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1672023906388</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
