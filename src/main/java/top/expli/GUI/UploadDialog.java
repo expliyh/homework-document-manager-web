@@ -108,6 +108,7 @@ public class UploadDialog extends JDialog {
             clientDocument.setOwner(me.getUserName());
             clientDocument.setFileName(toUpload.getName());
             clientDocument.setFile(inputStream.readAllBytes());
+            clientDocument.setDescription(descriptionArea.getText());
             WebAdapter.uploadDocument(clientDocument);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);

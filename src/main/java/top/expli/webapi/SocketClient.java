@@ -1,7 +1,7 @@
 package top.expli.webapi;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
+import top.expli.ConsoleLog;
 
 import java.io.*;
 import java.net.Socket;
@@ -12,31 +12,31 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class SocketClient {
-    protected PrintWriter printWriter;
-    protected BufferedReader bufferedReader;
-    protected ObjectMapper objectMapper;
+    protected ObjectOutputStream printWriter;
+    protected ObjectInputStream bufferedReader;
     private HeartBeat heartBeat;
     private Socket socket;
     private ScheduledExecutorService scheduledExecutorService;
     public Response sendMessage(Request request) throws IOException {
-        if (bufferedReader.ready()){
-            String aaa = bufferedReader.readLine();
+        printWriter.writeObject(request);
+        printWriter.flush();
+        try {
+            Response response = (Response) bufferedReader.readObject();
+            ConsoleLog.log(response.toString());
+            return response;
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
-        String requestJson = objectMapper.writeValueAsString(request);
-        printWriter.println(requestJson);
-        String responseJson = bufferedReader.readLine();
-        return objectMapper.readValue(responseJson, Response.class);
     }
     public SocketClient() {
         try {
             socket = new Socket("127.0.0.1", 11451);
             socket.setSoTimeout(60000);
-            objectMapper = new ObjectMapper();
-            printWriter =new PrintWriter(socket.getOutputStream(),true);
-            bufferedReader =new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            printWriter =new ObjectOutputStream(socket.getOutputStream());
+            bufferedReader =new ObjectInputStream(socket.getInputStream());
             scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
             heartBeat = new HeartBeat();
-            scheduledExecutorService.scheduleWithFixedDelay(heartBeat,0,10, TimeUnit.SECONDS);
+            scheduledExecutorService.scheduleWithFixedDelay(heartBeat,0,5, TimeUnit.SECONDS);
         } catch (SocketException e) {
             throw new RuntimeException(e);
         } catch (UnknownHostException e) {
@@ -49,10 +49,12 @@ public class SocketClient {
         @Override
         public void run(){
             try {
-                String requestJson = objectMapper.writeValueAsString(new Request(Request.NameSpace.SYSTEM,Request.Operations.HEARTBEAT));
-                printWriter.println(requestJson);
-            } catch (JsonProcessingException ignored) {
-                System.out.println("Heartbeat failed!");
+                printWriter.writeObject(new Request(Request.NameSpace.SYSTEM,Request.Operations.HEARTBEAT));
+                bufferedReader.readObject();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
             }
         }
         public HeartBeat(){

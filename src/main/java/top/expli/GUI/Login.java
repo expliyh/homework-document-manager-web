@@ -2,6 +2,7 @@ package top.expli.GUI;
 
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import top.expli.ClientUser;
+import top.expli.ExceptionProcess;
 import top.expli.exceptions.KnifeException;
 import top.expli.webapi.WebAdapter;
 
@@ -63,9 +64,10 @@ public class Login {
             System.out.println(passwd);
             ClientUser usr;
             try {
-                usr = WebAdapter.login(user_name, passwd);
+                WebAdapter.login(user_name, passwd);
+                usr = WebAdapter.getUserInfo(user_name);
             } catch (KnifeException | IOException ex) {
-                ErrorMessage.main(new String[0], ex);
+                ExceptionProcess.process(thisFrame, ex);
                 return;
             }
             if (usr.getPermissionLevel() <= 3) {

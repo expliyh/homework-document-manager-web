@@ -2,6 +2,7 @@ package top.expli.GUI;
 
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import top.expli.ClientUser;
+import top.expli.ConsoleLog;
 import top.expli.ExceptionProcess;
 import top.expli.exceptions.KnifeException;
 import top.expli.exceptions.UserNotFound;
@@ -111,6 +112,7 @@ public class Admin {
 //    }
 
     public static void main(Component parent, ClientUser usr) {
+        ConsoleLog.log("Open admin panel!");
         try {
             UIManager.setLookAndFeel(new FlatIntelliJLaf());
         } catch (UnsupportedLookAndFeelException e) {

@@ -11,25 +11,34 @@ import top.expli.webapi.Request.NameSpace;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.HashMap;
 import java.util.Vector;
 
 public class WebAdapter {
     public static SocketClient socketClient = null;
+    public static void connectToServer(){
+        socketClient = new SocketClient();
+    }
 
-    public static ClientUser login(String userName, String password) throws IOException, KnifeException {
+    public static void login(String userName, String password) throws IOException, KnifeException {
         Request request = new Request(NameSpace.SYSTEM, Operations.LOGIN);
-        Map<String, String> detail = new HashMap<>();
+        HashMap<String, String> detail = new HashMap<>();
         detail.put("userName", userName);
         detail.put("password", password);
         request.setDetail(detail);
         Response response = socketClient.sendMessage(request);
-        return getClientUserFromResponse(response);
+        if (response.getCode()==200){
+            return;
+        }else if (response.getException() == null) {
+            throw new ServerError();
+        } else {
+            throw response.getException();
+        }
     }
 
     public static void uploadDocument(ClientDocument clientDocument) throws IOException, KnifeException {
         Request request = new Request(NameSpace.DOCUMENTS, Operations.UPLOAD);
-        Map<String, String> detail = new HashMap<>();
+        HashMap<String, String> detail = new HashMap<>();
         detail.put("docName", clientDocument.getDocName());
         detail.put("lastModified", String.valueOf(clientDocument.getLastModified()));
         detail.put("fileName", clientDocument.getFileName());
@@ -49,7 +58,7 @@ public class WebAdapter {
 
     public static ClientDocument downloadDocument(String docName) throws IOException, KnifeException {
         Request request = new Request(NameSpace.DOCUMENTS, Operations.DOWNLOAD);
-        Map<String, String> detail = new HashMap<>();
+        HashMap<String, String> detail = new HashMap<>();
         request.setDetail(detail);
         Response response = socketClient.sendMessage(request);
         if (response.getCode() == 200) {
@@ -66,7 +75,7 @@ public class WebAdapter {
 
     public static void deleteUser(String userName) throws KnifeException, IOException {
         Request request = new Request(NameSpace.USERS, Operations.DELETE);
-        Map<String, String> detail = new HashMap<>();
+        HashMap<String, String> detail = new HashMap<>();
         detail.put("userName", userName);
         request.setDetail(detail);
         Response response = socketClient.sendMessage(request);
@@ -81,15 +90,32 @@ public class WebAdapter {
 
     public static ClientDocument getDocumentInfo(String docName) throws IOException, KnifeException {
         Request request = new Request(NameSpace.DOCUMENTS, Operations.GET);
-        Map<String, String> detail = new HashMap<>();
+        HashMap<String, String> detail = new HashMap<>();
         detail.put("docName", docName);
         request.setDetail(detail);
         Response response = socketClient.sendMessage(request);
         return getClientDocFromResponse(response);
     }
 
-    public static void addUser(ClientUser clientUser) {
+    public static void addUser(ClientUser clientUser) throws IOException, KnifeException {
+        Request request = new Request(NameSpace.USERS,Operations.ADD);
+        request.setDetail(userToHashMap(clientUser));
+        Response response = socketClient.sendMessage(request);
+        if (response.getCode()==200){
+            return;
+        } else if (response.getException() == null) {
+            throw new ServerError();
+        }else {
+            throw response.getException();
+        }
+    }
 
+    private static HashMap<String, String> userToHashMap(ClientUser clientUser) {
+        HashMap<String, String> detail = new HashMap<>();
+        detail.put("userName", clientUser.getUserName());
+        detail.put("password", clientUser.getPassword());
+        detail.put("permissionLevel", String.valueOf(clientUser.getPermissionLevel()));
+        return detail;
     }
 
     private static ClientDocument getClientDocFromResponse(Response response) throws KnifeException {
@@ -122,7 +148,7 @@ public class WebAdapter {
 
     public static ClientUser getUserInfo(String userName) throws IOException, KnifeException {
         Request request = new Request(NameSpace.USERS, Operations.GET);
-        Map<String, String> detail = new HashMap<>();
+        HashMap<String, String> detail = new HashMap<>();
         detail.put("userName", userName);
         request.setDetail(detail);
         Response response = socketClient.sendMessage(request);
@@ -131,11 +157,7 @@ public class WebAdapter {
 
     public static void editUser(ClientUser newUser) throws IOException, KnifeException {
         Request request = new Request(NameSpace.USERS, Operations.EDIT);
-        Map<String, String> detail = new HashMap<>();
-        detail.put("userName", newUser.getUserName());
-        detail.put("password", newUser.getPassword());
-        detail.put("permissionLevel", String.valueOf(newUser.getPermissionLevel()));
-        request.setDetail(detail);
+        request.setDetail(userToHashMap(newUser));
         Response response = socketClient.sendMessage(request);
         if (response.getCode() == 200) {
             return;

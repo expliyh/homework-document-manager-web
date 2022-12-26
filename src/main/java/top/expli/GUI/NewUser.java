@@ -13,6 +13,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 
 public class NewUser extends JDialog {
     private JPanel contentPane;
@@ -140,10 +141,11 @@ public class NewUser extends JDialog {
             ClientUser newUser = new ClientUser(userNameField.getText());
             newUser.setPassword(String.valueOf(passwordField.getPassword()));
             newUser.setPermissionLevel(permissionBox.getSelectedIndex() + 3);
-            WebAdapter
+            WebAdapter.addUser(newUser);
 //            cache_user.addUser(userNameField.getText(), String.valueOf(passwordField.getPassword()), permissionBox.getSelectedIndex() + 3);
-        } catch (KnifeException e) {
+        } catch (KnifeException | IOException e) {
             ExceptionProcess.process(getRootPane(), e);
+            return;
         }
         dispose();
     }

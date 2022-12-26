@@ -2,12 +2,12 @@ package top.expli.webapi;
 
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.Map;
+import java.util.HashMap;
 
 public class Request implements Serializable {
     public int nameSpace;
     public int operation;
-    public Map<String, String> detail;
+    public HashMap<String, String> detail;
 
     public Request(int nameSpace, int operation) {
         this.nameSpace = nameSpace;
@@ -30,11 +30,11 @@ public class Request implements Serializable {
         this.operation = operation;
     }
 
-    public Map<String, String> getDetail() {
+    public HashMap<String, String> getDetail() {
         return detail;
     }
 
-    public void setDetail(Map<String, String> detail) {
+    public void setDetail(HashMap<String, String> detail) {
         this.detail = detail;
     }
 
