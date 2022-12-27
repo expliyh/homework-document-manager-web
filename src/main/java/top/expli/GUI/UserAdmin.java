@@ -3,10 +3,15 @@ package top.expli.GUI;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import top.expli.ClientUser;
 import top.expli.ExceptionProcess;
+import top.expli.PasswordCheck;
+import top.expli.Permissions;
 import top.expli.exceptions.KnifeException;
 import top.expli.webapi.WebAdapter;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.Document;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
@@ -21,6 +26,11 @@ public class UserAdmin extends JDialog {
     private JPasswordField passwordField;
     private JButton userdelButton;
     private JComboBox<String> permissionBox;
+    private JButton forcePushButton;
+    private JPasswordField passwordConfirmField;
+    private JLabel errorLabel;
+    private Document passwordDoc;
+    private Document confirmDoc;
 
     private ClientUser user;
     private ClientUser me;
@@ -30,7 +40,10 @@ public class UserAdmin extends JDialog {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonCancel);
-
+        passwordDoc = passwordField.getDocument();
+        confirmDoc = passwordConfirmField.getDocument();
+        passwordDoc.addDocumentListener(new InputListener());
+        confirmDoc.addDocumentListener(new InputListener());
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onOK();
@@ -70,6 +83,61 @@ public class UserAdmin extends JDialog {
                 }
             }
         });
+        forcePushButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onOK();
+            }
+        });
+    }
+    private class InputListener implements DocumentListener{
+
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+            lCheck();
+        }
+
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+            lCheck();
+        }
+
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+            lCheck();
+        }
+    }
+    private void lCheck() {
+        boolean errorFound = false;
+        String password = String.valueOf(passwordField.getPassword());
+        String confirm = String.valueOf(passwordConfirmField.getPassword());
+        StringBuilder warnText = new StringBuilder();
+        switch (PasswordCheck.check(password, confirm)) {
+            case PasswordCheck.CHECK_PASSED, PasswordCheck.EMPTY_PASSWORD -> {
+            }
+            case PasswordCheck.PASSWORD_TOO_SHORT -> {
+                warnText.append("错误：密码太短");
+                errorFound = true;
+            }
+            case PasswordCheck.PASSWORD_TOO_LONG -> {
+                warnText.append("错误：密码太长");
+                errorFound = true;
+            }
+            case PasswordCheck.PASSWORD_TOO_SIMPLE -> {
+                warnText.append("错误：密码太简单");
+                errorFound = true;
+            }
+            case PasswordCheck.ILLEGAL_CHARACTER -> {
+                warnText.append("错误，密码含非法字符");
+                errorFound = true;
+            }
+            case PasswordCheck.PASSWORD_AND_CONFIRM_NOT_MATCH -> {
+                warnText.append("错误，密码与密码确认不一致");
+                errorFound = true;
+            }
+        }
+        errorLabel.setText(warnText.toString());
+        buttonOK.setEnabled(!errorFound);
     }
 
     public UserAdmin(ClientUser usr, ClientUser me) {
@@ -78,6 +146,12 @@ public class UserAdmin extends JDialog {
         this.me = me;
         nameField.setText(user.getUserName());
         String[] list = new String[]{"管理员", "用户", "访客"};
+        forcePushButton.setVisible(false);
+        forcePushButton.setEnabled(false);
+        if (me.getPermissionLevel()<= Permissions.SU){
+            forcePushButton.setVisible(true);
+            forcePushButton.setEnabled(true);
+        }
         if (usr.getPermissionLevel() < 3) {
             this.userdelButton.setVisible(false);
             list = new String[]{"管理员", "用户", "访客", "S·Y·S·T·E·M", "P·A·I·M·O·N", "SU"};

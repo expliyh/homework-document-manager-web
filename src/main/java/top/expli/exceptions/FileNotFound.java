@@ -10,8 +10,7 @@ public class FileNotFound extends KnifeException {
     }
 
     public FileNotFound(String message) {
-        super();
-        this.message = message;
+        super(message);
     }
 
     @Override
