@@ -4,21 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6fd4e7d9-5c8e-4028-8b4d-7a8dc63e5c22" name="变更" comment="Initial Commit">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/top/expli/ConsoleLog.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/top/expli/ExceptionProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/top/expli/ExceptionProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/top/expli/GUI/Admin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/top/expli/GUI/Admin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/top/expli/GUI/Login.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/top/expli/GUI/Login.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/top/expli/GUI/NewUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/top/expli/GUI/NewUser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/top/expli/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/top/expli/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/top/expli/webapi/Request.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/top/expli/webapi/Request.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/top/expli/webapi/Response.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/top/expli/webapi/Response.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/top/expli/webapi/SocketClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/top/expli/webapi/SocketClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/top/expli/webapi/WebAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/top/expli/webapi/WebAdapter.java" afterDir="false" />
-    </list>
+    <list default="true" id="6fd4e7d9-5c8e-4028-8b4d-7a8dc63e5c22" name="变更" comment="Initial Commit" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -102,7 +88,7 @@
       <option name="presentableId" value="Default" />
       <updated>1671937560623</updated>
       <workItem from="1671937562402" duration="8517000" />
-      <workItem from="1671975521011" duration="23081000" />
+      <workItem from="1671975521011" duration="23555000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit">
       <created>1671959048131</created>
@@ -167,7 +153,14 @@
       <option name="project" value="LOCAL" />
       <updated>1672055901254</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Initial Commit">
+      <created>1672068712083</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1672068712083</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
