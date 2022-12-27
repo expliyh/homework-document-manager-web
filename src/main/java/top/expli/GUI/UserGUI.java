@@ -2,6 +2,7 @@ package top.expli.GUI;
 
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import top.expli.ClientUser;
+import top.expli.Permissions;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,7 +21,9 @@ public class UserGUI {
     protected UserGUI(JFrame thisFrame, ClientUser me) {
         this.thisFrame = thisFrame;
         this.me = me;
-
+        if (me.getPermissionLevel()>= Permissions.PUBLIC){
+            uploadButton.setEnabled(false);
+        }
         docListButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

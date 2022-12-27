@@ -16,7 +16,8 @@ import java.util.Vector;
 
 public class WebAdapter {
     public static SocketClient socketClient = null;
-    public static void connectToServer(){
+
+    public static void connectToServer() {
         socketClient = new SocketClient();
     }
 
@@ -27,9 +28,9 @@ public class WebAdapter {
         detail.put("password", password);
         request.setDetail(detail);
         Response response = socketClient.sendMessage(request);
-        if (response.getCode()==200){
+        if (response.getCode() == 200) {
             return;
-        }else if (response.getException() == null) {
+        } else if (response.getException() == null) {
             throw new ServerError();
         } else {
             throw response.getException();
@@ -59,6 +60,7 @@ public class WebAdapter {
     public static ClientDocument downloadDocument(String docName) throws IOException, KnifeException {
         Request request = new Request(NameSpace.DOCUMENTS, Operations.DOWNLOAD);
         HashMap<String, String> detail = new HashMap<>();
+        detail.put("docName", docName);
         request.setDetail(detail);
         Response response = socketClient.sendMessage(request);
         if (response.getCode() == 200) {
@@ -98,14 +100,14 @@ public class WebAdapter {
     }
 
     public static void addUser(ClientUser clientUser) throws IOException, KnifeException {
-        Request request = new Request(NameSpace.USERS,Operations.ADD);
+        Request request = new Request(NameSpace.USERS, Operations.ADD);
         request.setDetail(userToHashMap(clientUser));
         Response response = socketClient.sendMessage(request);
-        if (response.getCode()==200){
+        if (response.getCode() == 200) {
             return;
         } else if (response.getException() == null) {
             throw new ServerError();
-        }else {
+        } else {
             throw response.getException();
         }
     }
@@ -118,12 +120,31 @@ public class WebAdapter {
         return detail;
     }
 
+    public static void editDocument(String oldDocName, ClientDocument newDoc) throws IOException, KnifeException {
+        Request request = new Request(NameSpace.DOCUMENTS, Operations.EDIT);
+        HashMap<String, String> detail = new HashMap<>();
+        detail.put("oldDocName", oldDocName);
+        detail.put("newDocName", newDoc.getDocName());
+        detail.put("newPermissionLevel", String.valueOf(newDoc.getPermission()));
+        detail.put("newDescription", newDoc.getDescription());
+        request.setDetail(detail);
+        Response response = socketClient.sendMessage(request);
+        if (response.getCode() == 200) {
+            return;
+        } else if (response.getException() == null) {
+            throw new ServerError();
+        } else {
+            throw response.getException();
+        }
+    }
+
     private static ClientDocument getClientDocFromResponse(Response response) throws KnifeException {
         if (response.getCode() == 200) {
             ClientDocument clientDocument = new ClientDocument(response.getDetail().get("docName"));
-            clientDocument.setPermission(response.getDetail().get("permission"));
-            clientDocument.setPermissionLevel(Integer.parseInt(response.getDetail().get("permissionLevel")));
-            clientDocument.setDescription(response.getDetail().get("description"));
+            clientDocument.setPermission(response.getDetail().get("docPermission"));
+            clientDocument.setPermissionLevel(Integer.parseInt(response.getDetail().get("docPermission")));
+            clientDocument.setDescription(response.getDetail().get("docDetail"));
+            clientDocument.setOwner(response.getDetail().get("docOwner"));
             return clientDocument;
         } else if (response.getException() == null) {
             throw new ServerError();

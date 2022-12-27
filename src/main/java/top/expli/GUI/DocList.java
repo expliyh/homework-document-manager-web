@@ -45,6 +45,7 @@ public class DocList {
                     } catch (IOException | KnifeException ex) {
                         ExceptionProcess.process(thisFrame,ex);
                     }
+                    refresh();
                 }
             }
         });

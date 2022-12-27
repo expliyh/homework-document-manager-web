@@ -21,6 +21,7 @@ public class SocketClient {
         printWriter.writeObject(request);
         printWriter.flush();
         try {
+            ConsoleLog.log(request.toString());
             Response response = (Response) bufferedReader.readObject();
             ConsoleLog.log(response.toString());
             return response;

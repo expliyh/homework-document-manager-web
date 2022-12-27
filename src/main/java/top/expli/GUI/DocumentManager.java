@@ -1,12 +1,10 @@
 package top.expli.GUI;
 
 import com.formdev.flatlaf.FlatIntelliJLaf;
-import top.expli.ClientDocument;
-import top.expli.ClientUser;
-import top.expli.ExceptionProcess;
-import top.expli.Permissions;
+import top.expli.*;
 import top.expli.exceptions.FileNotFound;
 import top.expli.exceptions.KnifeException;
+import top.expli.exceptions.PermissionDenied;
 import top.expli.webapi.WebAdapter;
 
 import javax.swing.*;
@@ -29,12 +27,22 @@ public class DocumentManager extends JDialog {
     private JButton downloadButton;
     private JButton deleteButton;
     private ClientUser me;
+    private ClientUser owner;
     protected ClientDocument document;
     int permissionMove;
 
     public DocumentManager(ClientUser me, ClientDocument document) {
         this.me = me;
         this.document = document;
+        try {
+            this.owner = WebAdapter.getUserInfo(document.getOwner());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (PermissionDenied e) {
+            permissionBox.setEnabled(false);
+        } catch (KnifeException e) {
+            ConsoleLog.log(e.toString());
+        }
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
@@ -42,17 +50,19 @@ public class DocumentManager extends JDialog {
         fileNameField.setEnabled(false);
         permissionMove = 4;
         String[] permissionList = new String[]{"私有", "公开"};
-        if (me.getPermissionLevel() == 3 && Objects.equals(document.getOwner(), me.getUserName())) {
-            permissionMove = 3;
-            permissionList = new String[]{"私有", "仅管理员可见", "公开"};
-        } else if (me.getPermissionLevel() < 3) {
-            permissionMove = 3;
-            permissionList = new String[]{"私有", "仅管理员可见", "公开"};
+        if (owner != null) {
+            if (owner.getPermissionLevel() == 3 && Objects.equals(document.getOwner(), me.getUserName())) {
+                permissionMove = 3;
+                permissionList = new String[]{"私有", "仅管理员可见", "公开"};
+            } else if (owner.getPermissionLevel() < 3) {
+                permissionMove = 3;
+                permissionList = new String[]{"私有", "仅管理员可见", "公开"};
+            }
         }
+        ownerField.setEnabled(false);
         if (me.getPermissionLevel() >= Permissions.GUEST) {
             docNameField.setEditable(false);
             docNameField.setEnabled(false);
-            ownerField.setEnabled(false);
             deleteButton.setEnabled(false);
             deleteButton.setVisible(false);
             buttonOK.setEnabled(false);
@@ -117,6 +127,13 @@ public class DocumentManager extends JDialog {
 
     private void onOK() {
         // 在此处添加您的代码
+        try {
+            WebAdapter.editDocument(document.getDocName(), new ClientDocument(docNameField.getText(), ownerField.getText(), String.valueOf(permissionBox.getSelectedIndex() + permissionMove), descriptionArea.getText()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (KnifeException e) {
+            throw new RuntimeException(e);
+        }
         dispose();
     }
 
@@ -139,6 +156,6 @@ public class DocumentManager extends JDialog {
         dialog.setLocationRelativeTo(parent);
         dialog.pack();
         dialog.setVisible(true);
-        System.exit(0);
+//        System.exit(0);
     }
 }
